@@ -6,12 +6,17 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
     const spirv_headers = b.dependency("spirv_headers", .{});
+    const shared = b.option(bool, "shared", "Build as a shared library") orelse false;
 
-    const lib = b.addStaticLibrary(.{
+    const lib = std.Build.Step.Compile.create(b, .{
         .name = "spirv-opt",
-        .target = target,
-        .optimize = optimize,
-    });
+        .kind = .lib,
+        .linkage = if (shared) .dynamic else .static,
+        .root_module = .{
+            .target = target,
+            .optimize = optimize,
+        },
+    });   
 
     const tag = target.result.os.tag;
 
