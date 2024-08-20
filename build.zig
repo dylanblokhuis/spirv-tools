@@ -9,7 +9,7 @@ pub fn build(b: *std.Build) void {
     const shared = b.option(bool, "shared", "Build as a shared library") orelse false;
 
     const lib = std.Build.Step.Compile.create(b, .{
-        .name = "spirv-opt",
+        .name = "spirvopt",
         .kind = .lib,
         .linkage = if (shared) .dynamic else .static,
         .root_module = .{
